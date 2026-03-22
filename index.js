@@ -4,6 +4,10 @@ import mongoose from "mongoose"
 const app = express();
 import { Book } from "./models/bookmodel.js";
 
+//middleware to parse JSON request bodies
+
+app.use(express.json());    
+
 app.get("/", (req, res) => {
     res.send("Hello, World!");
 });
@@ -29,6 +33,18 @@ app.post('/books', async (req, res) => {
     } catch (error) {
         return res.status(500).json({
             error: 'Failed to save the book'
+        });
+    }
+});
+
+// route for get all books from data base
+add.get("/books", async (req, res) => {
+    try {
+        const books = await Book.find(); 
+        return res.status(200).json(books);
+    } catch (error) {
+        return res.status(500).json({
+            error: 'Failed to retrieve books'
         });
     }
 });
